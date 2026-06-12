@@ -10,4 +10,12 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www
 
+COPY . .
+
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+
+RUN php artisan config:clear
+
 EXPOSE 8000
+
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=$PORT
