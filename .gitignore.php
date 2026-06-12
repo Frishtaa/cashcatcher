@@ -1,0 +1,7 @@
+backend/vendor/
+backend/.env
+backend/node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+.idea/
