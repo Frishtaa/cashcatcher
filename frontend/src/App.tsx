@@ -17,7 +17,7 @@ import { useT, isRTL } from './i18n';
 import logoUrl from './assets/cashcatcher-logo.jpg';
 
 type Page = 'dashboard' | 'transactions' | 'categories' | 'budgets' | 'reports';
-
+// Redeploy for API fix
 export default function App() {
   const api = useApi();
   const lang = api.settings?.language ?? 'en';
