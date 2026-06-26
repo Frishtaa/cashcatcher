@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class AuthController extends Controller
 {
@@ -43,7 +44,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
+            'password' => ['required', 'string', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()],
         ]);
 
         $user = User::create([
@@ -99,9 +100,6 @@ class AuthController extends Controller
         return response()->json(['user' => $this->formatUser($request->user())]);
     }
 
-    /**
-     * Send a password reset link to the given email address.
-     */
     public function forgotPassword(Request $request): JsonResponse
     {
         $request->validate([
@@ -116,7 +114,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'A password reset link has been sent to your email.']);
         }
 
-        // For security, don't reveal whether the email exists.
         if ($status === Password::INVALID_USER) {
             return response()->json(['message' => 'If that email exists, a password reset link has been sent.']);
         }
@@ -124,15 +121,12 @@ class AuthController extends Controller
         return response()->json(['message' => __($status)], 422);
     }
 
-    /**
-     * Reset the user's password.
-     */
     public function resetPassword(Request $request): JsonResponse
     {
         $request->validate([
             'token'    => 'required|string',
             'email'    => 'required|string|email',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => ['required', 'string', 'confirmed', PasswordRule::min(8)->mixedCase()->numbers()],
         ]);
 
         $status = Password::reset(

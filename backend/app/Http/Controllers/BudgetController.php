@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Budget;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-
+use Illuminate\Validation\Rule;
 class BudgetController extends Controller
 {
     public function index(Request $request): JsonResponse
@@ -19,7 +19,11 @@ class BudgetController extends Controller
     public function upsert(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => [
+                'required',
+                Rule::exists('categories', 'id')
+                    ->where('user_id', $request->user()->id),
+            ],
             'amount'      => 'required|numeric|min:0',
             'month'       => 'required|date_format:Y-m',
         ]);

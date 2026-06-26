@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Validation\Rule;
 
 class TransactionController extends Controller
 {
@@ -27,7 +28,11 @@ class TransactionController extends Controller
             'type'               => 'required|in:income,expense',
             'amount'             => 'required|numeric|min:0',
             'description'        => 'required|string|max:255',
-            'category_id'        => 'required|exists:categories,id',
+            'category_id' => [
+                'required',
+                Rule::exists('categories', 'id')
+                    ->where('user_id', $request->user()->id),
+            ],
             'date'               => 'required|date_format:Y-m-d',
             'recurring'          => 'nullable|boolean',
             'recurring_interval' => 'nullable|in:daily,weekly,monthly',
@@ -48,7 +53,11 @@ class TransactionController extends Controller
             'type'               => 'sometimes|in:income,expense',
             'amount'             => 'sometimes|numeric|min:0',
             'description'        => 'sometimes|string|max:255',
-            'category_id'        => 'sometimes|exists:categories,id',
+            'category_id' => [
+                'sometimes',
+                Rule::exists('categories', 'id')
+                    ->where('user_id', $request->user()->id),
+            ],
             'date'               => 'sometimes|date_format:Y-m-d',
             'recurring'          => 'nullable|boolean',
             'recurring_interval' => 'nullable|in:daily,weekly,monthly',

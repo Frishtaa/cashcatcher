@@ -3,13 +3,16 @@
 return [
     'paths' => ['api/*'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
-    'allowed_origins' => ['*'],
-
+    'allowed_origins' => [
+        'https://cashcatcher-app.vercel.app',
+        'http://localhost:5173',
+        'http://localhost:5174',
+    ],
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['Content-Type', 'Authorization', 'X-Requested-With'],
 
     'exposed_headers' => [],
 

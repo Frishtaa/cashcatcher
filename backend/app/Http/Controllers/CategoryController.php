@@ -19,7 +19,7 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name'  => 'required|string|max:100',
             'type'  => 'required|in:income,expense',
-            'color' => 'required|string|max:20',
+            'color' => 'required|string|regex:/^#[0-9A-Fa-f]{3,6}$/',
             'icon'  => 'required|string|max:20',
         ]);
         $data['user_id'] = $request->user()->id;
@@ -33,7 +33,7 @@ class CategoryController extends Controller
         $data = $request->validate([
             'name'  => 'sometimes|string|max:100',
             'type'  => 'sometimes|in:income,expense',
-            'color' => 'sometimes|string|max:20',
+            'color' => 'sometimes|string|regex:/^#[0-9A-Fa-f]{3,6}$/',
             'icon'  => 'sometimes|string|max:20',
         ]);
         $category->update($data);

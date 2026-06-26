@@ -6,12 +6,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\BudgetController;
 use Illuminate\Support\Facades\Route;
 
-// Public
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login',    [AuthController::class, 'login']);
-
-Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('/reset-password',  [AuthController::class, 'resetPassword']);
+// Public (rate limited)
+Route::middleware('throttle:10,1')->group(function () {
+    Route::post('/register',       [AuthController::class, 'register']);
+    Route::post('/login',          [AuthController::class, 'login']);
+    Route::post('/forgot-password',[AuthController::class, 'forgotPassword']);
+    Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+});
 
 // Protected
 Route::middleware('auth:sanctum')->group(function () {
