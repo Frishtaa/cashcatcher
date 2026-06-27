@@ -6,7 +6,7 @@ return [
     'allowed_methods' => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 
     'allowed_origins' => [
-        'https://cashcatcher-app.vercel.app',
+        'https://cashcatcher.online',
         'http://localhost:5173',
         'http://localhost:5174',
     ],
